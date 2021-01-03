@@ -1,26 +1,15 @@
 package main
 
 import (
-	"fmt"
-	"io/ioutil"
-	"net/http"
-	"regexp"
+	"github.com/gin-gonic/gin"
 )
 
 func main() {
-	resp, err := http.Get("https://dle.rae.es/")
-	if err != nil {
-		fmt.Println(err)
-	}
-	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	re := regexp.MustCompile(`<a data-cat='WOTD' data-acc='WOTD'[ A-z-="'%;À-ú/?0-9]+>`)
-
-	res := regexp.MustCompile(`\/[ A-z-="'%;À-ú/0-9]+`)
-
-	fmt.Printf(string(res.Find(re.Find(body))))
+	r := gin.Default()
+	r.GET("/ping", func(c *gin.Context) {
+		c.JSON(200, gin.H{
+			"message": "pong",
+		})
+	})
+	r.Run() // listen and serve on 0.0.0.0:8080 (for windows "localhost:8080")
 }
